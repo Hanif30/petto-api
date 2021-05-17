@@ -1,0 +1,29 @@
+{
+  "name": "petto-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hanif30/petto-api.git"
+  },
+  "author": "anep",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hanif30/petto-api/issues"
+  },
+  "homepage": "https://github.com/Hanif30/petto-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.9"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
