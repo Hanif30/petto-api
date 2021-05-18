@@ -5,6 +5,7 @@ const PetController = require('../controllers/pet-controller')
 const router = express.Router()
 
 router.get('/pets', PetController.getPets)
+router.get('/pet/:id', PetController.showPet)
 router.post('/pet', PetController.storePet)
 
 module.exports = router

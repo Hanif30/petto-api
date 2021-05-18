@@ -1,4 +1,6 @@
 const Pet = require('../models/pets')
+const createError = require('http-errors')
+const mongoose = require('mongoose')
 
 getPets = async (req, res) => {
     await Pet.find({}, (err, pets) => {
@@ -15,6 +17,26 @@ getPets = async (req, res) => {
         console.log(err)
         return res.status(400).json({ success: false, error: err })
     })
+}
+
+showPet = async (req, res, next) => {
+    const id = req.params.id
+    
+    try {
+        const pet = await Pet.findById({ _id: req.params.id })
+
+        if(!pet) {
+            throw createError(404, 'Pet not found')
+        }
+
+        res.status(200).json({ success: true, data: pet })
+    } catch (error) {
+        console.log(error)
+        if (error instanceof mongoose.CastError) {
+            next(createError(400, 'Invalid Id'))
+        }
+        next(error)
+    }
 }
 
 storePet = (req, res) => {
@@ -51,5 +73,6 @@ storePet = (req, res) => {
 
 module.exports = {
     getPets,
+    showPet,
     storePet,
 }
