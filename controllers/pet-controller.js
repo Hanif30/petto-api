@@ -3,27 +3,28 @@ const createError = require('http-errors')
 const mongoose = require('mongoose')
 
 getPets = async (req, res) => {
-    await Pet.find({}, (err, pets) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
+    try {
+        const pets = await Pet.find({})
+
+        if (!pets) {
+            throw createError(404, 'No pet found')
         }
-        if (!pets.length) {
-            return res
-                .status(400)
-                .json({ success: false, error: 'Pet not found' })
-        }
-        return res.status(200).json({ success: true, data: pets})
-    }).catch(err => {
-        console.log(err)
-        return res.status(400).json({ success: false, error: err })
-    })
+
+        return res.status(200).json({
+            success: true,
+            data: pets,
+        })
+
+    } catch (err) {
+        next(err)
+    }
 }
 
 showPet = async (req, res, next) => {
     const id = req.params.id
     
     try {
-        const pet = await Pet.findById({ _id: req.params.id })
+        const pet = await Pet.findById(id)
 
         if(!pet) {
             throw createError(404, 'Pet not found')
