@@ -94,6 +94,9 @@ updatePet = async (req, res, next) => {
 
     } catch (err) {
         console.log(err)
+        if (err instanceof mongoose.CastError) {
+            next(createError(400, 'Invalid Id'))
+        }
         next(err)
     }
 }
@@ -107,7 +110,7 @@ deletePet = async (req, res, next) => {
         if (!pet) {
             throw createError(404, 'Pet not found')
         }
-        
+
         return res.status(200).json({
             success: true,
             message: 'Pet successfully deleted',
@@ -115,6 +118,9 @@ deletePet = async (req, res, next) => {
         })
     } catch (err) {
         console.log(err);
+        if (err instanceof mongoose.CastError) {
+            next(createError(400, 'Invalid Id'))
+        }
         next(err)
     }
 }
