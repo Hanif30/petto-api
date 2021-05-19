@@ -2,7 +2,7 @@ const Pet = require('../models/pets')
 const createError = require('http-errors')
 const mongoose = require('mongoose')
 
-getPets = async (req, res) => {
+getPets = async (req, res, next) => {
     try {
         const pets = await Pet.find({})
 
@@ -72,8 +72,31 @@ storePet = (req, res) => {
     })
 }
 
+updatePet = async (req, res, next) => {
+    const body = req.body
+
+    try {
+        const pet = await Pet.findById(req.params.id)
+
+        pet.name = body.name
+        pet.dob = body.dob
+        await pet.save()
+
+        return res.status(200).json({
+            success: true,
+            message: 'Pet successfully updated',
+            data: pet,
+        })
+
+    } catch (err) {
+        console.log(err)
+        next(err)
+    }
+}
+
 module.exports = {
     getPets,
     showPet,
     storePet,
+    updatePet,
 }
