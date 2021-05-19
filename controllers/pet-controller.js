@@ -78,6 +78,10 @@ updatePet = async (req, res, next) => {
     try {
         const pet = await Pet.findById(req.params.id)
 
+        if (!pet) {
+            throw createError(404, 'Pet not found')
+        }
+
         pet.name = body.name
         pet.dob = body.dob
         await pet.save()
@@ -94,9 +98,31 @@ updatePet = async (req, res, next) => {
     }
 }
 
+deletePet = async (req, res, next) => {
+    const id = req.params.id
+
+    try {
+        const pet = await Pet.findOneAndDelete({ _id: id })
+
+        if (!pet) {
+            throw createError(404, 'Pet not found')
+        }
+        
+        return res.status(200).json({
+            success: true,
+            message: 'Pet successfully deleted',
+            data: pet,
+        })
+    } catch (err) {
+        console.log(err);
+        next(err)
+    }
+}
+
 module.exports = {
     getPets,
     showPet,
     storePet,
     updatePet,
+    deletePet,
 }
